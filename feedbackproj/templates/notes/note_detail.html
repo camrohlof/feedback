@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}{{ note.created }}{% endblock title %}
+
+{% block content %}
+    <h1>{{ note.created }}</h1>
+    <h2>Subject: {{ note.subject }}</h2>
+    <h5>Summary:</h5>
+    <p>{{ note.summary }}</p>
+    <h5>Details:</h5>
+    <p>{{ note.details }}</p>
+{% endblock content %}

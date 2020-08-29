@@ -3,7 +3,16 @@
 {% block content %}
 <ul>
     {% for notes in note_list %}
-        <li><a href="#TODO">{{ notes.created }} - {{ notes.subject }}</a></li>
+        <li><a href="{% url 'notes:detail' notes.slug%}">{{ notes.created }} - {{ notes.subject }}</a></li>
     {% endfor %}
 </ul>
+
+<hr/>
+<p>
+    <a class="btn btn-primary"
+        href="{% url 'notes:add' %}" role="button">
+        Add New Note
+    </a>
+</p>
+
 {% endblock content %}

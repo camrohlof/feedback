@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from .models import Note
@@ -13,9 +14,11 @@ class NoteDetailView(DetailView):
     model = Note
 
 
-class NoteCreateView(CreateView):
+class NoteCreateView(LoginRequiredMixin, CreateView):
     model = Note
     fields = ["subject", "summary", "details"]
+    login_url = "/login/"
+    redirect_field_name = "redirect_to"
 
 
 class NoteUpdateView(UpdateView):
