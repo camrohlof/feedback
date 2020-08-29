@@ -16,6 +16,10 @@ urlpatterns = [
     path("users/", include("feedbackproj.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
+    path(
+        "notes/",
+        include("feedbackproj.notes.urls", namespace="notes"),
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
