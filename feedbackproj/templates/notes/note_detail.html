@@ -1,12 +1,85 @@
 {% extends "base.html" %}
+{% load user_tags %}
 
 {% block title %}{{ note.created }}{% endblock title %}
 
 {% block content %}
-    <h1>{{ note.created }}</h1>
-    <h2>Subject: {{ note.subject }}</h2>
-    <h5>Summary:</h5>
-    <p>{{ note.summary }}</p>
-    <h5>Details:</h5>
-    <p>{{ note.details }}</p>
+<body>
+    <div class="card">
+        <a href="{% url 'notes:list' %}" class="btn btn-primary">Back to List</a>
+        <div class="card-header">
+            <h2>Note for the day of: </h2>
+            <h3>{{ note.forDate }}</h3>
+        </div>
+        <div class="card-header text-light bg-dark" >
+            <h2>Subject: {{ note.subject }}</h2>
+            <h6>Author: {{ note.creator }}</h6>
+        </div>
+        <div class="card-body">
+            <h5 class="card-subtitle">Summary:</h5>
+            <p class="card-text">{{ note.summary }}</p>
+        </div>
+        <div class="card-body">
+            <h5 class="card-subtitle">Details:</h5>
+            <p class="card-text">{{ note.details }}</p>
+        </div>
+        <div class="card-body">
+            <h6 class="card-subtitle">Created: {{ note.created  }}</h6>
+            <h6 class="card-text">Last modified: {{ note.modified }}</h6>
+        </div>
+        {% if request.user|has_group:"Administration" or request.user|has_group:"Manager" or request.user == comment.creator %}
+            <div class="card-footer">
+                <div class="btn-group">
+                    <a class="btn btn-warning"
+                        href="{% url 'notes:update' note.slug %}"
+                        role="button">
+                            Edit
+                    </a>
+                    <a class="btn btn-danger"
+                        href="{% url 'notes:delete' note.slug %}"
+                        role="button">
+                            Delete
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <hr/>
+    <div class="card">
+        <h2 class="card-header text-light bg-dark">Comments</h2>
+            {% if note.comments.all %}
+                <ul class="list-group">
+                    {% for comment in note.comments.all %}
+                        <li class="list-group-item">
+                            <div class="card-body">
+                                <h5 class="card-subtitle">{{ comment.creator }} commented:</h5>
+                                <p class="card-text">{{ comment.body | linebreaks }}</p>
+                                <h6 class="card-subtitle">{{ comment.created }}</h6>
+                            </div>
+                            {% if request.user|has_group:"Administration" or request.user|has_group:"Manager" or request.user == comment.creator %}
+                            <div class="btn-group btn-group-sm">
+                                <a class="btn btn-warning"
+                                    href="{% url 'notes:update' note.slug %}"
+                                    role="button">
+                                        Edit
+                                </a>
+                                <a class="btn btn-danger"
+                                    href="#TODO"
+                                    role="button">
+                                        Delete
+                                </a>
+                            </div>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <h5 class="card-footer">No comments ...yet.</h5>
+            {% endif %}
+    </div>
+
+    <a href="{% url 'notes:addcomment' note.slug%}" class="btn btn-block btn-primary">Add Comment</a>
+
+</body>
+
 {% endblock content %}

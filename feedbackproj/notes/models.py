@@ -1,3 +1,5 @@
+from datetime import date
+
 from autoslug import AutoSlugField
 from django.conf import settings
 from django.db import models
@@ -11,6 +13,7 @@ class Note(TimeStampedModel):
     slug = AutoSlugField(
         "Note Address", unique=True, always_update=False, populate_from="subject"
     )
+    forDate = models.DateField(default=date.today)
     summary = models.TextField("Summary", blank=True)
     details = models.TextField("Details", blank=True)
     creator = models.ForeignKey(
@@ -18,7 +21,7 @@ class Note(TimeStampedModel):
     )
 
     def __str__(self):
-        return self.created.strftime("%c") + " - " + self.subject
+        return str(self.forDate) + " - " + self.subject
 
     def get_absolute_url(self):
         return reverse("notes:detail", kwargs={"slug": self.slug})
@@ -32,4 +35,4 @@ class Comment(TimeStampedModel):
     body = models.TextField()
 
     def __str__(self):
-        return f"Comment {self.body} by {self.name}"
+        return f"Comment {self.body} by {self.creator}"

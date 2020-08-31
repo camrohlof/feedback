@@ -1,15 +1,39 @@
 {% extends "base.html" %}
+{% load user_tags %}
 
 {% block content %}
-<ul>
-    {% for notes in note_list %}
-        <li><a href="{% url 'notes:detail' notes.slug%}">{{ notes.created }} - {{ notes.subject }}</a></li>
-    {% endfor %}
-</ul>
 
+<h2>All Notes</h2>
+<table class="table">
+    <thead class="thead-dark">
+            <tr>
+                <th scope="col">Day</th>
+                <th scope="col">Subject</th>
+                <th scope="col">Created By</th>
+                <th scope="col">Actions</th>
+            </tr>
+    </thead>
+
+    {% for notes in note_list %}
+        <tr>
+            <th>{{ notes.forDate }}</th>
+            <th>{{ notes.subject }}</th>
+            <th>{{ notes.creator }}</th>
+            <th>
+                <div class="btn-group">
+                    <a class="btn btn-primary" href="{% url 'notes:detail' notes.slug %}">View</a>
+                    {% if request.user|has_group:"Administration" or request.user|has_group:"Manager" or request.user == notes.creator %}
+                    <a class="btn btn-warning" href="{% url 'notes:update' notes.slug %}">Edit</a>
+                    <a class="btn btn-danger" href="{% url 'notes:delete' notes.slug %}">Delete</a>
+                    {% endif %}
+                </div>
+            </th>
+        </tr>
+    {% endfor %}
+</table>
 <hr/>
 <p>
-    <a class="btn btn-primary"
+    <a class="btn btn-success"
         href="{% url 'notes:add' %}" role="button">
         Add New Note
     </a>
