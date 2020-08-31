@@ -22,8 +22,10 @@
             <th>
                 <div class="btn-group">
                     <a class="btn btn-primary" href="{% url 'notes:detail' notes.slug %}">View</a>
-                    {% if request.user|has_group:"Administration" or request.user|has_group:"Manager" or request.user == notes.creator %}
+                    {% if perms.notes.change or request.user == notes.creator %}
                     <a class="btn btn-warning" href="{% url 'notes:update' notes.slug %}">Edit</a>
+                    {% endif %}
+                    {% if perms.notes.delete or request.user == notes.creator %}
                     <a class="btn btn-danger" href="{% url 'notes:delete' notes.slug %}">Delete</a>
                     {% endif %}
                 </div>
@@ -33,10 +35,12 @@
 </table>
 <hr/>
 <p>
+    {% if perms.notes.add or request.user == notes.creator %}
     <a class="btn btn-success"
         href="{% url 'notes:add' %}" role="button">
         Add New Note
     </a>
+    {% endif %}
 </p>
 
 {% endblock content %}

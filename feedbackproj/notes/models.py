@@ -35,4 +35,4 @@ class Comment(TimeStampedModel):
     body = models.TextField()
 
     def __str__(self):
-        return f"Comment {self.body} by {self.creator}"
+        return f"Comment by {self.creator}"

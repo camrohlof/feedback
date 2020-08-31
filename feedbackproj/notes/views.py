@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import (
@@ -23,9 +24,10 @@ class NoteDetailView(DetailView):
     model = Note
 
 
-class NoteCreateView(LoginRequiredMixin, CreateView):
+class NoteCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
     model = Note
     fields = ["forDate", "subject", "summary", "details"]
+    permission_required = "notes.add"
 
     def form_valid(self, form):
         form.instance.creator = self.request.user
@@ -35,6 +37,12 @@ class NoteCreateView(LoginRequiredMixin, CreateView):
         form = super(NoteCreateView, self).get_form(form_class)
         form.fields["forDate"].widget = forms.DateInput(attrs={"type": "date"})
         return form
+
+    def handle_no_permission(self):
+        messages.error(
+            self.request, "You do not have permission to perform that action."
+        )
+        return super(NoteCreateView, self).handle_no_permission()
 
 
 class NoteUpdateView(LoginRequiredMixin, UpdateView):
