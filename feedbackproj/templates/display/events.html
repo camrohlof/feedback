@@ -1,0 +1,39 @@
+{% csrf_token %}
+
+<div class="container-fluid" id="content">
+    {% if current_events %}
+    <h2 id="underline">Today's events:</h2>
+    <div class="row">
+        <div class="col-4">
+          <ul>
+            {% for event in current_events %}
+            <div class="event">{{ event.name }}</div>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="col-4">
+          <ul>
+            {% for event in current_events %}
+            <div class="event">{{ event.dayTime|time }}</div>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="col-4">
+          <ul>
+            {% for event in current_events %}
+            <div class="event">{{ event.location }}</div>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+      {% else %}
+      <div class="row">
+        <div class="col" id="noEvents">
+          <h2>Text 'star' to</h2>
+          <h2>49798</h2>
+          <h2>for a chance to win a</h2>
+          <h2>$50 gift card!</h2>
+        </div>
+      </div>
+      {% endif %}
+  </div>
