@@ -20,10 +20,6 @@ urlpatterns = [
         "notes/",
         include("feedbackproj.notes.urls", namespace="notes"),
     ),
-    path(
-        "display/",
-        include("feedbackproj.display.urls", namespace="display"),
-    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
