@@ -22,11 +22,12 @@ Current State
 
 * Allows commenting on existing notes
 
-* Allows restrictions on access based on privilages
-  * Three user types have been implemented:
-    * Registered User
-    * Manager
-    * Admin
+* Allows restrictions on access based on the privilages of a user's type
+
+* Three user types have been implemented:
+  * Registered User
+  * Manager
+  * Admin
 
 Basic Commands
 --------------
